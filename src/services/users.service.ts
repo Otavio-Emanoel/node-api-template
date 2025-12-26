@@ -1,6 +1,5 @@
-import { Prisma } from '@prisma/client';
-
 import { prisma } from '../config/prisma';
+import { Prisma } from '../generated/prisma';
 import { hashPassword } from '../utils/password';
 
 export type CreateUserInput = {
