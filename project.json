@@ -1,0 +1,132 @@
+{
+  "project_info": {
+    "name": "node-api-template",
+    "description": "O boilerplate definitivo para APIs Node.js escaláveis e prontas para produção. Focado em Developer Experience (DX), performance e arquitetura limpa.",
+    "version": "1.0.0",
+    "license": "MIT",
+    "author": "Otavio Emanoel",
+    "repository_url": "https://github.com/Otavio-Emanoel/node-api-template"
+  },
+  "tech_stack": {
+    "runtime": "Node.js (LTS)",
+    "language": "TypeScript (Strict Mode)",
+    "framework": "Fastify",
+    "database_orm": "Prisma",
+    "database_engine": "PostgreSQL (via Docker)",
+    "validation": "Zod",
+    "testing": "Vitest + Supertest",
+    "documentation": "Swagger / OpenAPI (Fastify Swagger)",
+    "tooling": [
+      "ESLint",
+      "Prettier",
+      "Husky (Git Hooks)",
+      "Docker Compose"
+    ]
+  },
+  "key_features": [
+    {
+      "name": "Zero-Config Setup",
+      "description": "Ambiente de desenvolvimento completo (App + Banco) com um único comando docker-compose."
+    },
+    {
+      "name": "Type-Safe Environment",
+      "description": "Validação automática de variáveis de ambiente (.env) com Zod. O app não inicia se faltar configuração."
+    },
+    {
+      "name": "Clean Architecture",
+      "description": "Estrutura modular separando rotas, controllers, services e repositórios para fácil manutenção."
+    },
+    {
+      "name": "Fastify Ecosystem",
+      "description": "Uso do framework mais rápido do ecossistema Node.js com plugins oficiais para CORS, JWT e Swagger."
+    },
+    {
+      "name": "Automated Testing",
+      "description": "Configuração pronta para testes unitários e E2E (Ponta a Ponta) com Vitest."
+    }
+  ],
+  "project_structure": {
+    "src": {
+      "config": "Configurações de ambiente (env.ts) e plugins",
+      "controllers": "Lógica de entrada e saída HTTP (Req/Res)",
+      "services": "Regras de negócio e chamadas ao banco (Prisma)",
+      "routes": "Definição de endpoints e schemas do Swagger",
+      "middlewares": "Autenticação, tratamento de erros global",
+      "utils": "Funções auxiliares e helpers",
+      "app.ts": "Configuração da instância do Fastify",
+      "server.ts": "Entrypoint do servidor"
+    },
+    "prisma": {
+      "schema.prisma": "Modelagem do banco de dados",
+      "migrations": "Histórico de alterações do banco"
+    }
+  },
+  "api_endpoints": [
+    {
+      "tag": "System",
+      "description": "Rotas de saúde e monitoramento",
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/health",
+          "description": "Retorna o status da API e conexão com banco",
+          "response": { "status": "ok", "uptime": 120 }
+        }
+      ]
+    },
+    {
+      "tag": "Users",
+      "description": "Exemplo de CRUD completo de usuários",
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/users",
+          "description": "Registra um novo usuário no sistema",
+          "body_params": ["name", "email", "password"],
+          "status_code": 201
+        },
+        {
+          "method": "GET",
+          "path": "/users/:id",
+          "description": "Busca dados públicos de um usuário",
+          "params": ["id"],
+          "status_code": 200
+        }
+      ]
+    },
+    {
+      "tag": "Auth",
+      "description": "Autenticação JWT",
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/sessions",
+          "description": "Autentica usuário e retorna token JWT",
+          "body_params": ["email", "password"],
+          "response": { "token": "jwt_string" },
+          "status_code": 200
+        },
+        {
+          "method": "GET",
+          "path": "/me",
+          "description": "Retorna dados do perfil logado (Rota Protegida)",
+          "headers": ["Authorization: Bearer <token>"],
+          "status_code": 200
+        }
+      ]
+    }
+  ],
+  "environment_variables": {
+    "NODE_ENV": "dev | test | production",
+    "PORT": "Porta do servidor (ex: 3333)",
+    "DATABASE_URL": "Connection string do PostgreSQL",
+    "JWT_SECRET": "Chave secreta para assinatura de tokens"
+  },
+  "scripts": {
+    "dev": "Inicia servidor em modo watch (ts-node-dev)",
+    "build": "Compila TypeScript para JavaScript (dist)",
+    "start": "Inicia servidor de produção",
+    "test": "Roda suite de testes com Vitest",
+    "lint": "Verifica e corrige estilo de código"
+  }
+}
