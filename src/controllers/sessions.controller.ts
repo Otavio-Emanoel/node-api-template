@@ -38,8 +38,7 @@ export class SessionsController {
 
   me = async (request: FastifyRequest, reply: FastifyReply) => {
     try {
-      const decoded = await request.jwtVerify<{ sub: string }>();
-      const userId = decoded.sub;
+      const userId = request.user.sub;
       const profile = await this.usersService.getProfileById(userId);
 
       if (!profile) {
@@ -49,7 +48,7 @@ export class SessionsController {
       return reply.status(200).send(profile);
     } catch (error) {
       request.log.error({ error }, 'Get /me failed');
-      return reply.status(401).send({ message: 'Não autorizado.' });
+      return reply.status(500).send({ message: 'Erro interno.' });
     }
   };
 }

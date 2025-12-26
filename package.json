@@ -25,7 +25,7 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "dev": "npm run prisma:generate && npx ts-node-dev src/server.ts",
+    "dev": "npm run prisma:generate && npx ts-node-dev --files src/server.ts",
     "prisma:generate": "prisma generate",
     "prisma:migrate:dev": "prisma migrate dev",
     "prisma:studio": "prisma studio",

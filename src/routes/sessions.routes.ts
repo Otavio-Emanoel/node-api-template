@@ -1,6 +1,7 @@
 import type { FastifyInstance, FastifyPluginAsync } from 'fastify';
 
 import { SessionsController } from '../controllers/sessions.controller';
+import { authenticate } from '../middlewares/auth';
 
 export const sessionsRoutes: FastifyPluginAsync = async (app: FastifyInstance) => {
   const sessionsController = new SessionsController();
@@ -46,6 +47,7 @@ export const sessionsRoutes: FastifyPluginAsync = async (app: FastifyInstance) =
       schema: {
         tags: ['Auth'],
         summary: 'Perfil do usuário logado',
+        description: 'Requer JWT válido (bearerAuth).',
         security: [{ bearerAuth: [] }],
         response: {
           200: {
@@ -76,6 +78,7 @@ export const sessionsRoutes: FastifyPluginAsync = async (app: FastifyInstance) =
           },
         },
       },
+      preHandler: [authenticate],
     },
     sessionsController.me,
   );
