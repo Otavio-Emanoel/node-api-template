@@ -6,4 +6,6 @@ export const sessionsRoutes: FastifyPluginAsync = async (app: FastifyInstance) =
   const sessionsController = new SessionsController();
 
   app.post('/sessions', sessionsController.create);
+
+  app.get('/me', sessionsController.me);
 };

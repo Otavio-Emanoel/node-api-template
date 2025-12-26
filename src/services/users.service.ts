@@ -27,7 +27,6 @@ export class UsersService {
           id: true,
           name: true,
           email: true,
-          // @ts-ignore
           role: true,
           createdAt: true,
           updatedAt: true,
@@ -49,5 +48,19 @@ export class UsersService {
 
       throw error;
     }
+  }
+
+  async getProfileById(userId: string) {
+    return prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
   }
 }

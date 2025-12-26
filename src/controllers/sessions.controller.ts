@@ -2,9 +2,11 @@ import type { FastifyReply, FastifyRequest } from 'fastify';
 
 import { createSessionBodySchema } from '../schemas/sessions.schema';
 import { SessionsService } from '../services/sessions.service';
+import { UsersService } from '../services/users.service';
 
 export class SessionsController {
   private readonly sessionsService = new SessionsService();
+  private readonly usersService = new UsersService();
 
   create = async (request: FastifyRequest, reply: FastifyReply) => {
     const body = createSessionBodySchema.parse(request.body);
@@ -31,6 +33,23 @@ export class SessionsController {
 
       request.log.error({ error }, 'Create session failed');
       return reply.status(500).send({ message: 'Erro interno.' });
+    }
+  };
+
+  me = async (request: FastifyRequest, reply: FastifyReply) => {
+    try {
+      const decoded = await request.jwtVerify<{ sub: string }>();
+      const userId = decoded.sub;
+      const profile = await this.usersService.getProfileById(userId);
+
+      if (!profile) {
+        return reply.status(404).send({ message: 'Usuário não encontrado.' });
+      }
+
+      return reply.status(200).send(profile);
+    } catch (error) {
+      request.log.error({ error }, 'Get /me failed');
+      return reply.status(401).send({ message: 'Não autorizado.' });
     }
   };
 }
