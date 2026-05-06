@@ -9,9 +9,9 @@ export class SessionsController {
   private readonly usersService = new UsersService();
 
   create = async (request: FastifyRequest, reply: FastifyReply) => {
-    const body = createSessionBodySchema.parse(request.body);
-
     try {
+      const body = createSessionBodySchema.parse(request.body);
+
       const user = await this.sessionsService.authenticate(body);
 
       const token = await reply.jwtSign(
@@ -31,8 +31,9 @@ export class SessionsController {
         return reply.status(401).send({ message: 'Credenciais inválidas.' });
       }
 
+      // Não expor erro interno ao cliente
       request.log.error({ error }, 'Create session failed');
-      return reply.status(500).send({ message: 'Erro interno.' });
+      return reply.status(500).send({ message: 'Erro ao autenticar.' });
     }
   };
 
