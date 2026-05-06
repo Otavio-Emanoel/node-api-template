@@ -6,12 +6,16 @@ type ParamsWithId = {
   id?: string;
 };
 
+// Security: Middleware para verificar que o usuário está autenticado
 export const authenticate: preHandlerHookHandler = async (request, reply) => {
   try {
     await request.jwtVerify();
   } catch (error) {
-    request.log.error({ error }, 'JWT verification failed');
-    return reply.status(401).send({ message: 'Não autorizado.' } satisfies ErrorBody);
+    // Log detalhado apenas internamente, sem expor ao cliente
+    request.log.warn({ message: 'JWT verification failed' });
+    return reply
+      .status(401)
+      .send({ message: 'Não autorizado.' } satisfies ErrorBody);
   }
 };
 
